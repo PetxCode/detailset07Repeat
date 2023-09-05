@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import cloudinary from "../utils/cloudinary";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import streamifier from "streamifier";
 import {
   resetAccountPasswordMail,
   sendAccountOpeningMail,
@@ -145,9 +146,27 @@ export const updateAccountAvatar = async (req: any, res: Response) => {
   try {
     const { userID } = req.params;
 
-    const { secure_url, public_id } = await cloudinary.uploader.upload(
-      req.file.path
-    );
+    // const { secure_url, public_id } = await cloudinary.uploader.upload(
+    //   req.file.path
+    // );
+
+    let streamUpload = async (req: any) => {
+      return new Promise(async (resolve, reject) => {
+        let stream = await cloudinary.uploader.upload_stream(
+          (error, result) => {
+            if (result) {
+              return resolve(result);
+            } else {
+              return reject(error);
+            }
+          }
+        );
+
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+    };
+
+    const { secure_url, public_id }: any = await streamUpload(req);
 
     const user = await prisma.authModel.update({
       where: { id: userID },

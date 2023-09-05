@@ -20,6 +20,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/multer": "^1.4.7",
     "@types/nodemailer": "^6.4.9",
+    "@types/streamifier": "^0.1.0",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.40.0",
     "cors": "^2.8.5",
@@ -29,7 +30,8 @@
     "joi": "^17.10.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.4"
+    "nodemailer": "^6.9.4",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "prisma": "^5.2.0"
