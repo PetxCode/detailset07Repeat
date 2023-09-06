@@ -6,8 +6,10 @@ import helmet from "helmet";
 
 export const mainApp = (app: Application) => {
   app.use(cors());
+
   app.use(morgan("dev"));
   app.use(helmet());
+
   app.use(express.json());
   app.set("view engine", "ejs");
 

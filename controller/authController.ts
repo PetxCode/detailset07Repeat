@@ -10,6 +10,7 @@ import {
   sendAccountOpeningMail,
 } from "../utils/email";
 import { role } from "../utils/roles";
+import { streamUpload } from "../utils/uploadHelper";
 
 const prisma = new PrismaClient();
 
@@ -46,7 +47,7 @@ export const viewAccount = async (req: Request, res: Response) => {
   }
 };
 
-export const registerAccount = async (req: Request, res: Response) => {
+export const registerAccount = async (req: any, res: Response) => {
   try {
     const { userName, email, password } = req.body;
 
@@ -81,7 +82,6 @@ export const registerAccount = async (req: Request, res: Response) => {
 export const registerDispacherAccount = async (req: Request, res: Response) => {
   try {
     const { userName, email, password, dispatchID } = req.body;
-    // dispatchersData
 
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
@@ -163,22 +163,6 @@ export const updateAccountAvatar = async (req: any, res: Response) => {
     // const { secure_url, public_id } = await cloudinary.uploader.upload(
     //   req.file.path
     // );
-
-    let streamUpload = async (req: any) => {
-      return new Promise(async (resolve, reject) => {
-        let stream = await cloudinary.uploader.upload_stream(
-          (error, result) => {
-            if (result) {
-              return resolve(result);
-            } else {
-              return reject(error);
-            }
-          }
-        );
-
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
-      });
-    };
 
     const { secure_url, public_id }: any = await streamUpload(req);
 
