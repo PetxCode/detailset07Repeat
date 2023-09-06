@@ -10,7 +10,6 @@ import {
   sendAccountOpeningMail,
 } from "../utils/email";
 import { role } from "../utils/roles";
-import dispatchersData from "../utils/dispatcherID.json";
 
 const prisma = new PrismaClient();
 
@@ -89,7 +88,22 @@ export const registerDispacherAccount = async (req: Request, res: Response) => {
     const value = crypto.randomBytes(16).toString("hex");
     const token = jwt.sign(value, "justRand");
 
-    const findDispatcher = dispatchersData.find((el) => el.id === dispatchID);
+    const sreachData = [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+      {
+        id: 3,
+      },
+      {
+        id: 4,
+      },
+    ];
+
+    const findDispatcher = sreachData.some((el: any) => el.id === dispatchID);
 
     if (findDispatcher) {
       const user = await prisma.authModel.create({
