@@ -65,6 +65,7 @@ export const registerAccount = async (req: any, res: Response) => {
         role: role.USER,
       },
     });
+
     const tokenID = jwt.sign({ id: user.id }, "justRand");
     sendAccountOpeningMail(user, tokenID);
 
@@ -188,6 +189,7 @@ export const deleteAccount = async (req: Request, res: Response) => {
 
     await prisma.authModel.delete({
       where: { id: userID },
+      include: { store: true },
     });
 
     return res.status(201).json({
@@ -196,6 +198,7 @@ export const deleteAccount = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       message: "Error deleting Account",
+      data: error,
     });
   }
 };
@@ -260,7 +263,7 @@ export const verifiedAccount = async (req: Request, res: Response) => {
     });
 
     const user = await prisma.authModel.update({
-      where: { id: getID },
+      where: { id: getID.id },
       data: {
         verified: true,
         token: "",

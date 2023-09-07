@@ -3,6 +3,8 @@ import cors from "cors";
 import auth from "./router/authRouter";
 import morgan from "morgan";
 import helmet from "helmet";
+import store from "./router/storeRouter";
+import comment from "./router/CommentRouter";
 
 export const mainApp = (app: Application) => {
   app.use(cors());
@@ -14,6 +16,8 @@ export const mainApp = (app: Application) => {
   app.set("view engine", "ejs");
 
   app.use("/api", auth);
+  app.use("/api", store);
+  app.use("/api", comment);
 
   app.get("/", (req: Request, res: Response) => {
     try {

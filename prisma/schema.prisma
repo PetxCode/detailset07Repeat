@@ -44,7 +44,37 @@ model storeModel {
 
   createdAt DateTime @default(now())
 
-  user authModel @relation(fields: [userID], references: [id])
+  user authModel @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userID String 
 
+  rating Int[]
+  rate Int?
+
+  comments commentModel[]
+}
+
+
+model commentModel {
+  id String @id @default(uuid())
+
+  comment String
+  
+  createdAt DateTime @default(now())
+
+  store storeModel @relation(fields: [storeID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeID String 
+  userID String 
+
+  reply replyModel[]
+}
+
+model replyModel {
+  id String @id @default(uuid())
+
+  reply String
+  
+  createdAt DateTime @default(now())
+
+  comment commentModel @relation(fields: [commentID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  commentID String 
 }
