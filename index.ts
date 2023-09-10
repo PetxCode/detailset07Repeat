@@ -7,7 +7,7 @@ const port: number = 1122;
 
 mainApp(app);
 
-const server = app.listen(port, () => {
+const server = app.listen(process.env.PORT || port, () => {
   console.log();
   console.log("server connected");
 });

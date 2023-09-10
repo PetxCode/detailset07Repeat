@@ -5,6 +5,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import store from "./router/storeRouter";
 import comment from "./router/CommentRouter";
+import puppet from "puppeteer";
 
 export const mainApp = (app: Application) => {
   app.use(cors());
@@ -19,7 +20,7 @@ export const mainApp = (app: Application) => {
   app.use("/api", store);
   app.use("/api", comment);
 
-  app.get("/", (req: Request, res: Response) => {
+  app.get("/", async (req: Request, res: Response) => {
     try {
       return res.status(200).json({
         message: "This is the Test...",
@@ -27,6 +28,7 @@ export const mainApp = (app: Application) => {
     } catch (error) {
       return res.status(404).json({
         message: "Error",
+        data: error,
       });
     }
   });
