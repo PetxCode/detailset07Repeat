@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model authModel {
+  id String @id @default(uuid())
+
+  userName String
+  email String @unique
+  password String 
+
+  verified Boolean @default(false)
+  token String?
+
+  avatar String?
+  avatarID String?
+
+  role String
+  roleID String? @unique
+
+  createdAt DateTime @default(now())
+
+  store storeModel[]
+}
+
+model storeModel {
+  id String @id @default(uuid())
+
+  title String
+  cost Int
+  description String
+  category String
+
+  image String?
+  imageID String?
+
+  createdAt DateTime @default(now())
+
+  user authModel @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userID String 
+
+  rating Int[]
+  rate Int?
+
+  comments commentModel[]
+}
+
+
+model commentModel {
+  id String @id @default(uuid())
+
+  comment String
+  
+  createdAt DateTime @default(now())
+
+  store storeModel @relation(fields: [storeID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeID String 
+  userID String 
+
+  reply replyModel[]
+}
+
+model replyModel {
+  id String @id @default(uuid())
+
+  reply String
+  
+  createdAt DateTime @default(now())
+
+  comment commentModel @relation(fields: [commentID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  commentID String 
+}
