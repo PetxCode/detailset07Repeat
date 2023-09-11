@@ -1,5 +1,4 @@
 import express, { Application } from "express";
-import cors from "cors";
 import { mainApp } from "./mainApp";
 
 const app: Application = express();
