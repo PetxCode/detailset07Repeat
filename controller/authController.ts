@@ -17,7 +17,7 @@ const prisma = new PrismaClient();
 export const viewAccounts = async (req: Request, res: Response) => {
   try {
     const user = await prisma.authModel.findMany({});
-
+    console.log("reading");
     return res.status(200).json({
       message: "Accounts found",
       data: user,
@@ -25,6 +25,7 @@ export const viewAccounts = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(404).json({
       message: "Error viewing Accounts",
+      data: error,
     });
   }
 };

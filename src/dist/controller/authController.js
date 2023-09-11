@@ -24,6 +24,7 @@ const prisma = new client_1.PrismaClient();
 const viewAccounts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield prisma.authModel.findMany({});
+        console.log("reading");
         return res.status(200).json({
             message: "Accounts found",
             data: user,
@@ -32,6 +33,7 @@ const viewAccounts = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     catch (error) {
         return res.status(404).json({
             message: "Error viewing Accounts",
+            data: error,
         });
     }
 });

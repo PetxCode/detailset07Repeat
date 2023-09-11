@@ -23,7 +23,7 @@ const GOOGLE_REFRESH_TOKEN = "1//04GgN8ydoI_ZdCgYIARAAGAQSNwF-L9IrKCOkFE95PncupZ
 const GOOGLE_URL = "https://developers.google.com/oauthplayground";
 const oAuth = new googleapis_1.google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_URL);
 oAuth.setCredentials({ access_token: GOOGLE_REFRESH_TOKEN });
-const url = "http://localhost:1122";
+const url = "http://localhost:5173/";
 const sendAccountOpeningMail = (user, tokenID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const getAccess = (yield oAuth.getAccessToken()).token;
