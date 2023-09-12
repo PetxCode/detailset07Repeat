@@ -37,6 +37,7 @@ export const sendAccountOpeningMail = async (user: any, tokenID: string) => {
     };
 
     const readData = path.join(__dirname, "../views/accountOpening.ejs");
+
     const data = await ejs.renderFile(readData, passedData);
 
     const mailer = {
@@ -70,7 +71,7 @@ export const resetAccountPasswordMail = async (user: any, tokenID: string) => {
 
     const passedData = {
       userName: user.userName,
-      url: `${url}/${tokenID}/verify-account`,
+      url: `${url}/${tokenID}/reset-account-password`,
     };
 
     const readData = path.join(__dirname, "../views/resetPassword.ejs");

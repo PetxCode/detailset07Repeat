@@ -73,7 +73,7 @@ const resetAccountPasswordMail = (user, tokenID) => __awaiter(void 0, void 0, vo
         });
         const passedData = {
             userName: user.userName,
-            url: `${url}/${tokenID}/verify-account`,
+            url: `${url}/${tokenID}/reset-account-password`,
         };
         const readData = path_1.default.join(__dirname, "../views/resetPassword.ejs");
         const data = yield ejs_1.default.renderFile(readData, passedData);
