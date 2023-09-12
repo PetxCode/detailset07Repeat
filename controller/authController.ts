@@ -300,7 +300,9 @@ export const resetAccountPassword = async (req: Request, res: Response) => {
         },
       });
 
-      resetAccountPasswordMail(user, token);
+      resetAccountPasswordMail(user, token).then(() => {
+        console.log("message Sent...!");
+      });
 
       return res.status(201).json({
         message: "You can now change your Password",

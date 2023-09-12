@@ -287,7 +287,9 @@ const resetAccountPassword = (req, res) => __awaiter(void 0, void 0, void 0, fun
                     token,
                 },
             });
-            (0, email_1.resetAccountPasswordMail)(user, token);
+            (0, email_1.resetAccountPasswordMail)(user, token).then(() => {
+                console.log("message Sent...!");
+            });
             return res.status(201).json({
                 message: "You can now change your Password",
                 data: token,
