@@ -209,7 +209,7 @@ const signInAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (user) {
             const check = yield bcrypt_1.default.compare(password, user.password);
             if (check) {
-                if (user.verified && user.token !== "") {
+                if (user.verified && user.token === "") {
                     const token = jsonwebtoken_1.default.sign({
                         id: user.id,
                     }, "secret", { expiresIn: "3d" });
@@ -279,8 +279,10 @@ const resetAccountPassword = (req, res) => __awaiter(void 0, void 0, void 0, fun
         const user = yield prisma.authModel.findUnique({
             where: { email },
         });
+        console.log("user: ", user);
         if ((user === null || user === void 0 ? void 0 : user.verified) && user.token === "") {
             const token = jsonwebtoken_1.default.sign({ id: user.id }, "justRand");
+            console.log("3: ", email, token);
             yield prisma.authModel.update({
                 where: { id: user.id },
                 data: {
@@ -290,6 +292,7 @@ const resetAccountPassword = (req, res) => __awaiter(void 0, void 0, void 0, fun
             (0, email_1.resetAccountPasswordMail)(user, token).then(() => {
                 console.log("message Sent...!");
             });
+            console.log("4: ", email);
             return res.status(201).json({
                 message: "You can now change your Password",
                 data: token,
@@ -302,6 +305,7 @@ const resetAccountPassword = (req, res) => __awaiter(void 0, void 0, void 0, fun
         }
     }
     catch (error) {
+        console.log(error);
         return res.status(404).json({
             message: "Error verifying Account",
         });

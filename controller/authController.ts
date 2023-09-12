@@ -216,7 +216,7 @@ export const signInAccount = async (req: Request, res: Response) => {
       const check = await bcrypt.compare(password, user.password);
 
       if (check) {
-        if (user.verified && user.token !== "") {
+        if (user.verified && user.token === "") {
           const token = jwt.sign(
             {
               id: user.id,
@@ -290,8 +290,12 @@ export const resetAccountPassword = async (req: Request, res: Response) => {
       where: { email },
     });
 
+    console.log("user: ", user);
+
     if (user?.verified && user.token === "") {
       const token = jwt.sign({ id: user.id }, "justRand");
+
+      console.log("3: ", email, token);
 
       await prisma.authModel.update({
         where: { id: user.id },
@@ -303,7 +307,7 @@ export const resetAccountPassword = async (req: Request, res: Response) => {
       resetAccountPasswordMail(user, token).then(() => {
         console.log("message Sent...!");
       });
-
+      console.log("4: ", email);
       return res.status(201).json({
         message: "You can now change your Password",
         data: token,
@@ -314,6 +318,7 @@ export const resetAccountPassword = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(404).json({
       message: "Error verifying Account",
     });
