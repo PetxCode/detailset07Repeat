@@ -136,6 +136,44 @@ export const registerDispacherAccount = async (req: Request, res: Response) => {
     });
   }
 };
+export const registerAdminAccount = async (req: Request, res: Response) => {
+  try {
+    const { userName, email, password, adminSecret } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(password, salt);
+    const value = crypto.randomBytes(16).toString("hex");
+    const token = jwt.sign(value, "justRand");
+
+    if (adminSecret === "code") {
+      const user = await prisma.authModel.create({
+        data: {
+          userName,
+          email,
+          password: hashed,
+          token,
+          role: role.ADMIN,
+        },
+      });
+
+      const tokenID = jwt.sign({ id: user.id }, "justRand");
+      sendAccountOpeningMail(user, tokenID);
+
+      return res.status(201).json({
+        message: "Account created",
+        data: user,
+      });
+    } else {
+      return res.status(404).json({
+        message: "Please check your Dispatcher ID",
+      });
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: "Error creating Account",
+    });
+  }
+};
 
 export const updateAccountInfo = async (req: Request, res: Response) => {
   try {

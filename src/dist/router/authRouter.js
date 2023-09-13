@@ -18,6 +18,12 @@ router
     .post((0, validatorHolder_1.default)(validator_1.createAccountValidator), authController_1.registerAccount);
 router.route("/sign-in-account").post(authController_1.signInAccount);
 router.route("/:token/verify-account").post(authController_1.verifiedAccount);
+router
+    .route("/register-dispatch")
+    .post((0, validatorHolder_1.default)(validator_1.createDispatchAccountValidator), authController_1.registerDispacherAccount);
+router
+    .route("/register-admin")
+    .post((0, validatorHolder_1.default)(validator_1.createAdminAccountValidator), authController_1.registerAdminAccount);
 router.route("/:userID/update-account-info").patch(authController_1.updateAccountInfo);
 router
     .route("/:userID/update-account-avatar")

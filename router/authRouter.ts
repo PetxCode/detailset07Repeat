@@ -3,6 +3,8 @@ import {
   changeAccountPassword,
   deleteAccount,
   registerAccount,
+  registerAdminAccount,
+  registerDispacherAccount,
   resetAccountPassword,
   signInAccount,
   updateAccountAvatar,
@@ -12,7 +14,11 @@ import {
   viewAccounts,
 } from "../controller/authController";
 import validatorHolder from "../utils/validatorHolder";
-import { createAccountValidator } from "../utils/validator";
+import {
+  createAccountValidator,
+  createAdminAccountValidator,
+  createDispatchAccountValidator,
+} from "../utils/validator";
 const router = express.Router();
 import multer from "multer";
 
@@ -29,6 +35,16 @@ router
 router.route("/sign-in-account").post(signInAccount);
 
 router.route("/:token/verify-account").post(verifiedAccount);
+router
+  .route("/register-dispatch")
+  .post(
+    validatorHolder(createDispatchAccountValidator),
+    registerDispacherAccount
+  );
+
+router
+  .route("/register-admin")
+  .post(validatorHolder(createAdminAccountValidator), registerAdminAccount);
 
 router.route("/:userID/update-account-info").patch(updateAccountInfo);
 router

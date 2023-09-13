@@ -10,6 +10,23 @@ export const createAccountValidator = joi.object({
   confirm: joi.ref("password"),
 });
 
+export const createDispatchAccountValidator = joi.object({
+  userName: joi.string().required(),
+  email: joi.string().email().lowercase().trim().required(),
+  password: joi.string().pattern(new RegExp(regex)).required(),
+  confirm: joi.ref("password"),
+
+  dispatchID: joi.number().required(),
+});
+export const createAdminAccountValidator = joi.object({
+  userName: joi.string().required(),
+  email: joi.string().email().lowercase().trim().required(),
+  password: joi.string().pattern(new RegExp(regex)).required(),
+  confirm: joi.ref("password"),
+
+  adminSecret: joi.string().lowercase().required(),
+});
+
 export const signInAccountValidator = joi.object({
   email: joi.string().email().lowercase().trim().required(),
   password: joi.string().pattern(new RegExp(regex)).required(),

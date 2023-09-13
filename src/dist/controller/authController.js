@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeAccountPassword = exports.resetAccountPassword = exports.verifiedAccount = exports.signInAccount = exports.deleteAccount = exports.updateAccountAvatar = exports.updateAccountInfo = exports.registerDispacherAccount = exports.registerAccount = exports.viewAccount = exports.viewAccounts = void 0;
+exports.changeAccountPassword = exports.resetAccountPassword = exports.verifiedAccount = exports.signInAccount = exports.deleteAccount = exports.updateAccountAvatar = exports.updateAccountInfo = exports.registerAdminAccount = exports.registerDispacherAccount = exports.registerAccount = exports.viewAccount = exports.viewAccounts = void 0;
 const client_1 = require("@prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -138,6 +138,43 @@ const registerDispacherAccount = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.registerDispacherAccount = registerDispacherAccount;
+const registerAdminAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userName, email, password, adminSecret } = req.body;
+        const salt = yield bcrypt_1.default.genSalt(10);
+        const hashed = yield bcrypt_1.default.hash(password, salt);
+        const value = crypto_1.default.randomBytes(16).toString("hex");
+        const token = jsonwebtoken_1.default.sign(value, "justRand");
+        if (adminSecret === "code") {
+            const user = yield prisma.authModel.create({
+                data: {
+                    userName,
+                    email,
+                    password: hashed,
+                    token,
+                    role: roles_1.role.ADMIN,
+                },
+            });
+            const tokenID = jsonwebtoken_1.default.sign({ id: user.id }, "justRand");
+            (0, email_1.sendAccountOpeningMail)(user, tokenID);
+            return res.status(201).json({
+                message: "Account created",
+                data: user,
+            });
+        }
+        else {
+            return res.status(404).json({
+                message: "Please check your Dispatcher ID",
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: "Error creating Account",
+        });
+    }
+});
+exports.registerAdminAccount = registerAdminAccount;
 const updateAccountInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userID } = req.params;
